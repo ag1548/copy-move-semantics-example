@@ -17,9 +17,8 @@ public:
 
     // Move Constructor
     MyInt(MyInt && other) noexcept
-        : pInt(other.pInt) {
+        : pInt(std::exchange(other.pInt, nullptr)) {
         std::cout << "Calling move constructor" << std::endl;
-        other.pInt = nullptr;
     }
 
     // Copy assignment
