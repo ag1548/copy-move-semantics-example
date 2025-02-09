@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>
 
 class MyInt {
 public:
@@ -22,24 +23,25 @@ public:
     }
 
     // Copy assignment
-    MyInt & operator=(const MyInt & other) noexcept {
+    MyInt & operator=(const MyInt & other) {
         std::cout << "Calling copy assignment" << std::endl;
-        if (this != &other) {
-            delete pInt;
-            pInt  = new int;
-            *pInt = *other.pInt;
+        if (this == &other) {
+            return *this;
         }
+
+        MyInt temp(other);
+        std::swap(pInt, temp.pInt);
+
         return *this;
     }
 
     // Move assignment
     MyInt & operator=(MyInt && other) noexcept {
         std::cout << "Calling move assignment" << std::endl;
-        if (this != &other) {
-            delete pInt;
-            pInt       = other.pInt;
-            other.pInt = nullptr;
-        }
+
+        MyInt temp(std::move(other));
+        std::swap(pInt, temp.pInt);
+
         return *this;
     }
 
